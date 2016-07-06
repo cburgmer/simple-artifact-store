@@ -17,19 +17,12 @@ express()
             next();
         }
     })
-
     .use(function(req, res, next) {
         if (req.method === 'PUT') {
-            var filename = getFilename(req.path);
-            return req
-                .on('end', function() {
-                    respondFileCreated(req, res, filename);
-                })
-                .on('error', next)
-                .pipe(fs.createWriteStream(path.join(dir, filename)));
+            uploadFile(res, next, req);
+        } else {
+            next(new Error("Sorry, I don't understand this"));
         }
-
-        next(new Error("Sorry, I don't understand this"));
     })
     .use(function(err, req, res, next) {
         if (err) {
@@ -47,6 +40,16 @@ function ensureUploadDir() {
     } catch (_) {
         fs.mkdirSync(dir);
     }
+}
+
+function uploadFile(res, next, req) {
+    var filename = getFilename(req.path);
+    req
+        .on('end', function() {
+            respondFileCreated(req, res, filename);
+        })
+        .on('error', next)
+        .pipe(fs.createWriteStream(path.join(dir, filename)));
 }
 
 function respondFileCreated(req, res, filename) {
