@@ -21,10 +21,10 @@ express()
             return req
                 .on('end', function() {
                     debug('end');
-                    success(res);
+                    respondFileCreated(req, res, filename);
                 })
                 .on('error', next)
-                .pipe(fs.createWriteStream(filename));
+                .pipe(fs.createWriteStream(path.join(dir, filename)));
         }
 
         next(new Error("Sorry, I don't understand this"));
@@ -39,11 +39,16 @@ express()
         console.log('Listening on %d, serving files from %s', port, dir);
     });
 
-function getFilename(pathname) {
-    return path.join(dir, path.basename(pathname));
+function respondFileCreated(req, res, filename) {
+    var targetUrl = fileUrl(req, filename);
+    res.status(201).header('Location', targetUrl).send('Stored under ' + targetUrl);
 }
 
-function success(res) {
-    var txt = 'success';
-    res.send(txt);
+function getFilename(pathname) {
+    return path.basename(pathname);
+}
+
+function fileUrl(req, filename) {
+    var hostUrl = req.protocol + '://' + req.get('host');
+    return hostUrl + '/' + filename;
 }
