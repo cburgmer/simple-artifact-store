@@ -1,25 +1,11 @@
 var name = 'putfile';
 var debug = require('debug')(name);
 var express = require('express');
-var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
 
 var port = process.argv[2] || 8080;
 var dir = './uploads';
-
-var multipart = multer({
-    dest: dir,
-    rename: function(fieldname, filename) {
-        return fieldname;
-    },
-    onParseEnd: function(req, next) {
-        next();
-    },
-    onError: function(err, next) {
-        next(err);
-    }
-});
 
 express()
     .use(express.static(dir))
@@ -28,7 +14,6 @@ express()
         debug('enter', req.method);
         next();
     })
-    .use(multipart)
     .use(function(req, res, next) {
         var files = Object.keys(req.files || []);
         if (files.length) return success(files, res);
