@@ -15,23 +15,19 @@ express()
         next();
     })
     .use(function(req, res, next) {
-        var files = Object.keys(req.files || []);
-        if (files.length) return success(files, res);
-
-        if (/POST|PUT/.test(req.method)) {
+        if (/PUT/.test(req.method)) {
             var filename = getFilename(req.path);
             debug('filename: %s, path: %s', filename, req.path);
             return req
                 .on('end', function() {
                     debug('end');
-                    files.push(filename);
-                    success(files, res);
+                    success(res);
                 })
                 .on('error', next)
                 .pipe(fs.createWriteStream(filename));
         }
 
-        next(new Error('Get nothing'));
+        next(new Error("Sorry, I don't understand this"));
     })
     .use(function(err, req, res, next) {
         if (err) {
@@ -40,18 +36,14 @@ express()
         }
     })
     .listen(port, function(err) {
-        console.log('listen on %d', port);
+        console.log('Listening on %d, serving files from %s', port, dir);
     });
 
 function getFilename(pathname) {
-    var ret = path.basename(pathname);
-    if (!ret) {
-        ret = 'unnamed-' + (+new Date());
-    }
-    return path.join(dir, ret);
+    return path.join(dir, path.basename(pathname));
 }
 
-function success(files, res) {
-    var txt = files.join('\n') + '\nuploaded success!\n';
+function success(res) {
+    var txt = 'success';
     res.send(txt);
 }
