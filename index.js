@@ -2,12 +2,9 @@ var name = 'putfile';
 var debug = require('debug')(name);
 var express = require('express');
 var multer = require('multer');
-var assert = require('assert');
 var path = require('path');
 var fs = require('fs');
-var serveIndex = require('serve-index');
 
-var app = express();
 var port = process.argv[2] || 80;
 var dir = '.';
 
@@ -24,12 +21,9 @@ var multipart = multer({
     }
 });
 
-app
-    // static server
+express()
     .use(express.static(dir))
-    //.use(serveIndex(dir))
 
-    // upload
     .use(function(req, res, next) {
         debug('enter', req.method);
         next();
