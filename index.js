@@ -1,5 +1,4 @@
 var name = 'putfile';
-var debug = require('debug')(name);
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
@@ -11,16 +10,10 @@ express()
     .use(express.static(dir))
 
     .use(function(req, res, next) {
-        debug('enter', req.method);
-        next();
-    })
-    .use(function(req, res, next) {
         if (/PUT/.test(req.method)) {
             var filename = getFilename(req.path);
-            debug('filename: %s, path: %s', filename, req.path);
             return req
                 .on('end', function() {
-                    debug('end');
                     respondFileCreated(req, res, filename);
                 })
                 .on('error', next)
@@ -31,7 +24,7 @@ express()
     })
     .use(function(err, req, res, next) {
         if (err) {
-            debug('err: %o', err);
+            console.log(err);
             res.status(400).send(err.message);
         }
     })
@@ -41,6 +34,7 @@ express()
 
 function respondFileCreated(req, res, filename) {
     var targetUrl = fileUrl(req, filename);
+    console.log("Uploading", filename);
     res.status(201).header('Location', targetUrl).send('Stored under ' + targetUrl);
 }
 
