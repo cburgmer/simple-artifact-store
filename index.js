@@ -6,6 +6,8 @@ var fs = require('fs');
 var port = process.argv[2] || 8080;
 var dir = './uploads';
 
+ensureUploadDir();
+
 express()
     .use(express.static(dir))
     .use(function(req, res, next) {
@@ -39,6 +41,14 @@ express()
     .listen(port, function(err) {
         console.log('Listening on %d, serving files from %s', port, dir);
     });
+
+function ensureUploadDir() {
+    try {
+        fs.accessSync(dir, fs.F_OK);
+    } catch (_) {
+        fs.mkdirSync(dir);
+    }
+}
 
 function respondFileCreated(req, res, filename) {
     var targetUrl = fileUrl(req, filename);
