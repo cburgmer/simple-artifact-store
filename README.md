@@ -6,7 +6,7 @@ simple-artifact-store
         align="right" alt="NPM version" height="18">
 </a>
 
-Simple artifact store that receives files via `PUT` and makes the available via `GET`.
+Simple artifact store that receives files via `PUT` and makes them available via `GET`.
 
 Installation
 ---

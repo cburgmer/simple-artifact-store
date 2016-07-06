@@ -1,7 +1,7 @@
 {
   "name": "simple-artifact-store",
   "version": "1.0.0",
-  "description": "Simple artifact store that receives files via PUT and makes the available via GET.",
+  "description": "Simple artifact store that receives files via PUT and makes them available via GET.",
   "main": "index.js",
   "bin": {
     "simple-artifact-store": "./bin/simple-artifact-store.js"
