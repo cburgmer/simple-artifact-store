@@ -1,27 +1,33 @@
-putfile
+simple-artifact-store
 ===
 
 [![NPM version][npm-image]][npm-url]
-[npm-image]: https://img.shields.io/npm/v/putfile.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/putfile
+[npm-image]: https://img.shields.io/npm/v/simple-artifact-store.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/simple-artifact-store
 
-
-File Upload server with command-line
+Simple artifact store that receives files via `PUT` and makes the available via `GET`.
 
 Installation
 ---
 
 ```sh
-npm i putfile -g
+npm install simple-artifact-store -g
 ```
 
 Usage
 ---
 
+#### Start server
+
+``` shell
+$ simple-artifact-store 8080
+
+```
+
 #### Send one file
 
-```sh
-curl -T my.file URL
+``` shell
+curl -T my.file http://localhost:8080/my.file
 ```
 
 License
