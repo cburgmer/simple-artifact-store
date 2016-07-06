@@ -5,8 +5,8 @@ var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
 
-var port = process.argv[2] || 80;
-var dir = '.';
+var port = process.argv[2] || 8080;
+var dir = './uploads';
 
 var multipart = multer({
     dest: dir,
@@ -63,7 +63,7 @@ function getFilename(pathname) {
     if (!ret) {
         ret = 'unnamed-' + (+new Date());
     }
-    return ret;
+    return path.join(dir, ret);
 }
 
 function success(files, res) {
