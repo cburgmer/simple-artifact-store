@@ -8,9 +8,17 @@ var dir = './uploads';
 
 express()
     .use(express.static(dir))
+    .use(function(req, res, next) {
+        if (req.method === 'GET') {
+            console.log("Not found", req.path);
+            res.status(404).send("This is not the file you are looking for");
+        } else {
+            next();
+        }
+    })
 
     .use(function(req, res, next) {
-        if (/PUT/.test(req.method)) {
+        if (req.method === 'PUT') {
             var filename = getFilename(req.path);
             return req
                 .on('end', function() {
